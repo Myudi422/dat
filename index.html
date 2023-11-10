@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Dating Selector</title>
+</head>
+<body class="bg-gradient-to-r from-pink-500 to-purple-800 text-white flex items-center justify-center h-screen">
+
+    <div class="max-w-md w-full bg-white p-8 rounded-md shadow-lg" id="page1">
+
+        <!-- Page Indicator -->
+        <div class="flex justify-center items-center mb-8">
+            <div class="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center text-lg font-bold text-white">
+                1
+            </div>
+            <div class="w-1 h-1 bg-gray-300 mx-2"></div>
+            <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-lg font-bold">
+                2
+            </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="mb-8 text-center">
+            <h1 class="text-3xl font-bold mb-6 text-gray-800">
+                Choose your preference
+            </h1>
+            
+            <div class="flex justify-center items-center space-x-4">
+                <button class="bg-pink-600 text-white py-3 px-8 rounded-full text-lg shadow-md" onclick="findMatch('male')">
+                    <i class="fas fa-mars mr-2"></i> Male
+                </button>
+
+                <button class="bg-purple-600 text-white py-3 px-8 rounded-full text-lg shadow-md" onclick="findMatch('female')">
+                    <i class="fas fa-venus mr-2"></i> Female
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation Section -->
+        <div class="flex items-center justify-between">
+            <button class="bg-gray-300 text-gray-800 py-3 px-6 rounded-full" onclick="goToPage(0)" id="prevButton" disabled>
+                <i class="fas fa-chevron-left"></i>
+            </button>
+
+            <button class="bg-pink-600 text-white py-3 px-6 rounded-full" onclick="goToPage(1)" id="nextButton" disabled>
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Second Page Content -->
+    <div class="max-w-md w-full bg-white p-8 rounded-md shadow-lg hidden" id="page2">
+        <!-- Page Indicator -->
+        <div class="flex justify-center items-center mb-8">
+            <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-lg font-bold">
+                1
+            </div>
+            <div class="w-1 h-1 bg-gray-300 mx-2"></div>
+            <div class="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center text-lg font-bold text-white">
+                2
+            </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="mb-8 text-center">
+            <h1 class="text-3xl font-bold mb-6 text-gray-800">
+                Finding your match...
+            </h1>
+            
+            <p class="text-lg mb-4 text-gray-700" id="matchNotification">
+                Searching for potential matches. Please wait...
+            </p>
+
+            <!-- Chat & Date Button -->
+            <button class="bg-pink-600 text-white py-3 px-6 rounded-full text-lg shadow-md hidden" id="chatDateButton" onclick="showMatchNotification()">
+                Chat & Date
+            </button>
+        </div>
+
+        <!-- Navigation Section -->
+        <div class="flex items-center justify-between">
+            <button class="bg-gray-300 text-gray-800 py-3 px-6 rounded-full" onclick="goToPage(0)" id="prevButton2">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to handle page navigation and match notification
+        let gender; // Menambahkan variabel gender di luar fungsi untuk menyimpan pilihan gender
+        let chatDateButtonVisible = false; // Menambahkan variabel untuk melacak keadaan tombol Chat & Date
+
+        function goToPage(pageNumber) {
+            const page1 = document.getElementById('page1');
+            const page2 = document.getElementById('page2');
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+            const chatDateButton = document.getElementById('chatDateButton');
+
+            if (pageNumber === 0) {
+                page1.classList.remove('hidden');
+                page2.classList.add('hidden');
+                prevButton.disabled = true;
+                nextButton.disabled = !gender; // Disable nextButton jika gender belum dipilih
+                chatDateButton.classList.add('hidden'); // Sembunyikan tombol Chat & Date
+            } else if (pageNumber === 1) {
+                page1.classList.add('hidden');
+                page2.classList.remove('hidden');
+
+                // Simulate finding a match after a random delay (1 to 7 seconds)
+                const randomDelay = Math.floor(Math.random() * 7000) + 1000; // Delay between 1 and 7 seconds
+                setTimeout(() => {
+                    const matchNotification = document.getElementById('matchNotification');
+                    matchNotification.textContent = `Match found! You've been paired with a ${gender}.`;
+
+                    // Show the Chat & Date button
+                    chatDateButton.classList.remove('hidden');
+                    chatDateButtonVisible = true;
+                }, randomDelay);
+            }
+        }
+
+        function findMatch(selectedGender) {
+            // Simulate starting the match search
+            gender = selectedGender; // Menyimpan pilihan gender
+            const matchNotification = document.getElementById('matchNotification');
+            matchNotification.textContent = `Searching for potential matches. Please wait...`;
+
+            // Enable the next button
+            const nextButton = document.getElementById('nextButton');
+            nextButton.disabled = false;
+
+            // Show the second page
+            goToPage(1);
+        }
+
+        function showMatchNotification() {
+            if (chatDateButtonVisible) {
+                alert("You can now chat and date your match!");
+            }
+        }
+    </script>
+
+</body>
+</html>
